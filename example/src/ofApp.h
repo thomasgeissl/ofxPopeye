@@ -23,5 +23,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-    ofxPopeye _popeye;
+    ofxPopeye::Manager _popeye;
+    ofEasyCam _cam;
 };

@@ -1,27 +1,49 @@
 #pragma once
 #include "ofxOscReceiver.h"
+#include "./Hand.h"
 
-class ofxPopeye
+namespace ofxPopeye
 {
-public:
-	void setup(int port)
+	class Manager
 	{
-		_oscReceiver.setup(port);
-	}
-	void update()
-	{
-		while (_oscReceiver.hasWaitingMessages())
+	public:
+		void setup(int port)
 		{
-			ofxOscMessage m;
-			_oscReceiver.getNextMessage(m);
-
-			if (m.getAddress() == "/popeye/")
+			_oscReceiver.setup(port);
+		}
+		void update()
+		{
+			// receive positions
+			while (_oscReceiver.hasWaitingMessages())
 			{
-				// mouseYf = m.getArgAsFloat(1);
+				ofxOscMessage m;
+				_oscReceiver.getNextMessage(m);
+				auto parts = ofSplitString(m.getAddress(), "/");
+				// TODO: prefix
+				if (parts[1] == "popeye" && parts[2] == "hands")
+				{
+					auto handIndex = ofToInt(parts[3]);
+					auto partId = parts[4];
+					auto x = m.getArgAsFloat(0);
+					auto y = m.getArgAsFloat(1);
+					auto z = m.getArgAsFloat(2);
+					if (handIndex >= _hands.size())
+					{
+						_hands.resize(handIndex + 1);
+					}
+					_hands[handIndex].setPosition(partId, x, y, z);
+				}
+			}
+
+			auto timestamp = ofGetElapsedTimeMillis();
+			for (auto i = 0; i < _hands.size(); i++)
+			{
+				// if (_hands.)
 			}
 		}
-	}
 
-private:
-	ofxOscReceiver _oscReceiver;
+		// private:
+		ofxOscReceiver _oscReceiver;
+		std::vector<Hand> _hands;
+	};
 };

@@ -3,6 +3,9 @@
 void ofApp::setup()
 {
     ofSetBackgroundColor(16, 16, 16);
+    ofSetVerticalSync(true);
+    ofEnableDepthTest();
+
     _popeye.setup(8000);
 }
 
@@ -17,6 +20,18 @@ void ofApp::update()
 
 void ofApp::draw()
 {
+    _cam.begin();
+    ofSetColor(ofColor::white);
+    auto width = ofGetWidth();
+    auto height = ofGetHeight();
+    for (auto hand : _popeye._hands)
+    {
+        auto position = hand.getPosition(ofxPopeye::Hand::POINT::INDEX_FINGER_TIP);
+
+        ofDrawSphere(ofMap(position.x, 0, 2, -100, 100), ofMap(position.y, 0, 2, -100, 100), 0, 10);
+    }
+
+    _cam.end();
 }
 
 void ofApp::keyPressed(int key)

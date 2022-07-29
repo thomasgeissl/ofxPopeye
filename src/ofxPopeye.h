@@ -38,7 +38,11 @@ namespace ofxPopeye
 			auto timestamp = ofGetElapsedTimeMillis();
 			for (auto i = 0; i < _hands.size(); i++)
 			{
-				// if (_hands.)
+				if (timestamp - _hands[i]._lastUpdatedTimestamp > 500)
+				{
+					_hands.erase(_hands.begin() + i);
+					break;
+				}
 			}
 		}
 

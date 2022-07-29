@@ -45,7 +45,7 @@ namespace ofxPopeye
 			return _positions[point];
 		}
 
-	private:
+		// private:
 		int getIndex(std::string id)
 		{
 			if (id == "wrist")

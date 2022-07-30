@@ -28,9 +28,25 @@ void ofApp::draw()
     // ofTranslate(-width / 2, -height / 2);
     for (auto hand : _popeye._hands)
     {
-        auto position = hand.getPosition(ofxPopeye::Hand::POINT::INDEX_FINGER_TIP);
+        // auto position = hand.getPosition(ofxPopeye::Hand::POINT::INDEX_FINGER_TIP);
+        for (auto position : hand._positions)
+        {
+            ofDrawCircle(ofMap(position.x, 0, 2, width / 2 - 100, width / 2 + 100), ofMap(position.y, 0, 2, height / 2 - 100, height / 2 + 100), 5);
+        }
+    }
 
-        ofDrawCircle(ofMap(position.x, 0, 2, width / 2 - 100, width / 2 + 100), ofMap(position.y, 0, 2, height / 2 - 100, height / 2 + 100), 20);
+    for (auto pose : _popeye._poses)
+    {
+        // auto position = hand.getPosition(ofxPopeye::Hand::POINT::INDEX_FINGER_TIP);
+        auto index = 0;
+        for (auto position : pose._positions)
+        {
+            ofSetColor(ofColor::white);
+            ofDrawCircle(ofMap(position.x, 0, 2, width / 2 - 100, width / 2 + 100), ofMap(position.y, 0, 2, height / 2 - 100, height / 2 + 100), 5);
+            ofSetColor(ofColor::red);
+            ofDrawBitmapString(ofToString(index),ofMap(position.x, 0, 2, width / 2 - 100, width / 2 + 100), ofMap(position.y, 0, 2, height / 2 - 100, height / 2 + 100) );
+            index++;
+        }
     }
     // ofPopMatrix();
 

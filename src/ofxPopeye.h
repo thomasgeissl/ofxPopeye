@@ -1,6 +1,7 @@
 #pragma once
 #include "ofxOscReceiver.h"
 #include "./Hand.h"
+#include "./Pose.h"
 
 namespace ofxPopeye
 {
@@ -33,6 +34,19 @@ namespace ofxPopeye
 					}
 					_hands[handIndex].setPosition(partId, x, y, z);
 				}
+				if (parts[1] == "popeye" && parts[2] == "pose")
+				{
+					auto poseIndex = 0;//ofToInt(parts[3]);
+					auto partId = parts[3];
+					auto x = m.getArgAsFloat(0);
+					auto y = m.getArgAsFloat(1);
+					auto z = m.getArgAsFloat(2);
+					if (poseIndex >= _poses.size())
+					{
+						_poses.resize(poseIndex + 1);
+					}
+					_poses[poseIndex].setPosition(partId, x, y, z);
+				}
 			}
 
 			auto timestamp = ofGetElapsedTimeMillis();
@@ -44,10 +58,19 @@ namespace ofxPopeye
 					break;
 				}
 			}
+						for (auto i = 0; i < _poses.size(); i++)
+			{
+				if (timestamp - _poses[i]._lastUpdatedTimestamp > 500)
+				{
+					_poses.erase(_poses.begin() + i);
+					break;
+				}
+			}
 		}
 
 		// private:
 		ofxOscReceiver _oscReceiver;
 		std::vector<Hand> _hands;
+		std::vector<Pose> _poses;
 	};
 };

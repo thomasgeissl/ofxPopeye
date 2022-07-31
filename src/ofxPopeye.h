@@ -8,8 +8,9 @@ namespace ofxPopeye
 	class Manager
 	{
 	public:
-		void setup(int port)
+		void setup(int port, bool mirrored = false)
 		{
+			_parameters.add(_mirrored.set("mirrored", mirrored));
 			_oscReceiver.setup(port);
 		}
 		void update()
@@ -32,11 +33,11 @@ namespace ofxPopeye
 					{
 						_hands.resize(handIndex + 1);
 					}
-					_hands[handIndex].setPosition(partId, x, y, z);
+					_hands[handIndex].setPosition(partId, _mirrored ? 1 - x : x, y, z);
 				}
 				if (parts[1] == "popeye" && parts[2] == "pose")
 				{
-					auto poseIndex = 0;//ofToInt(parts[3]);
+					auto poseIndex = 0; // ofToInt(parts[3]);
 					auto partId = parts[3];
 					auto x = m.getArgAsFloat(0);
 					auto y = m.getArgAsFloat(1);
@@ -45,7 +46,7 @@ namespace ofxPopeye
 					{
 						_poses.resize(poseIndex + 1);
 					}
-					_poses[poseIndex].setPosition(partId, x, y, z);
+					_poses[poseIndex].setPosition(partId, _mirrored ? 1 - x : x, y, z);
 				}
 			}
 
@@ -58,7 +59,7 @@ namespace ofxPopeye
 					break;
 				}
 			}
-						for (auto i = 0; i < _poses.size(); i++)
+			for (auto i = 0; i < _poses.size(); i++)
 			{
 				if (timestamp - _poses[i]._lastUpdatedTimestamp > 500)
 				{
@@ -72,5 +73,7 @@ namespace ofxPopeye
 		ofxOscReceiver _oscReceiver;
 		std::vector<Hand> _hands;
 		std::vector<Pose> _poses;
+		ofParameterGroup _parameters;
+		ofParameter<bool> _mirrored;
 	};
 };

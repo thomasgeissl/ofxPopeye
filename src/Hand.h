@@ -34,7 +34,7 @@ namespace ofxPopeye
 		void setPosition(std::string id, float x, float y, float z)
 		{
 			auto index = getIndex(id);
-			if (index > 0)
+			if (index >= 0)
 			{
 				_positions[index] = glm::vec3(x, y, z);
 			}

@@ -7,8 +7,9 @@ namespace ofxPopeye
 	class Manager
 	{
 	public:
-		void setup(int port)
+		void setup(int port, std::string session = "")
 		{
+			_session = session;
 			_oscReceiver.setup(port);
 		}
 		void update()
@@ -18,12 +19,22 @@ namespace ofxPopeye
 			{
 				ofxOscMessage m;
 				_oscReceiver.getNextMessage(m);
-				auto parts = ofSplitString(m.getAddress(), "/");
-				// TODO: prefix
-				if (parts[1] == "popeye" && parts[2] == "hands")
+				// if a session id is set and address does not start with session id then return
+				if (!_session.empty() && m.getAddress().rfind(_session, 0) != 0)
 				{
-					auto handIndex = ofToInt(parts[3]);
-					auto partId = parts[4];
+					return;
+				}
+				auto parts = ofSplitString(m.getAddress(), "/");
+				auto index = 0;
+				std::string part = "";
+				while (index < parts.size() && parts[index] != "popeye")
+				{
+					index++;
+				}
+				if (parts[index] == "popeye" && parts[index + 1] == "hands")
+				{
+					auto handIndex = ofToInt(parts[index + 2]);
+					auto partId = parts[index + 3];
 					auto x = m.getArgAsFloat(0);
 					auto y = m.getArgAsFloat(1);
 					auto z = m.getArgAsFloat(2);
@@ -49,5 +60,6 @@ namespace ofxPopeye
 		// private:
 		ofxOscReceiver _oscReceiver;
 		std::vector<Hand> _hands;
+		std::string _session;
 	};
 };

@@ -7,8 +7,9 @@ void ofApp::setup()
     ofEnableDepthTest();
 
     auto mirrored = true;
-    // _popeye.setup(8000, mirrored);
-    _popeye.setup(8000, mirrored, "/session");
+    _popeye.setup(8000, mirrored);
+    // or filter detections by session address prefix
+    // _popeye.setup(8000, mirrored, "/session");
 }
 
 void ofApp::exit()

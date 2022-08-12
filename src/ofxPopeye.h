@@ -2,6 +2,7 @@
 #include "ofxOscReceiver.h"
 #include "./Hand.h"
 #include "./Pose.h"
+#include "./TeachableMachine.h"
 
 namespace ofxPopeye
 {
@@ -59,6 +60,13 @@ namespace ofxPopeye
 					}
 					_poses[poseIndex].setPosition(partId, _mirrored ? 1 - x : x, y, z);
 				}
+
+				if (parts[index] == "popeye" && parts[index + 1] == "tm")
+				{
+					auto label = parts[index + 2];
+					auto confidence = m.getArgAsFloat(0);
+					_teachableMachine.setConfidence(label, confidence);
+				}
 			}
 
 			auto timestamp = ofGetElapsedTimeMillis();
@@ -84,6 +92,7 @@ namespace ofxPopeye
 		ofxOscReceiver _oscReceiver;
 		std::vector<Hand> _hands;
 		std::vector<Pose> _poses;
+		TeachableMachine _teachableMachine;
 		ofParameterGroup _parameters;
 		ofParameter<std::string> _session;
 		ofParameter<bool> _mirrored;

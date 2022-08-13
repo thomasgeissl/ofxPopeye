@@ -28,6 +28,10 @@ namespace ofxPopeye
             return result;
         }
 
+        void clear(){
+            _confidences.clear();
+        }
+
         std::map<std::string, float> _confidences;
         uint64_t _lastUpdatedTimestamp;
     };

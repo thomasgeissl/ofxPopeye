@@ -86,6 +86,10 @@ namespace ofxPopeye
 					break;
 				}
 			}
+
+			if(timestamp - _teachableMachine._lastUpdatedTimestamp > 5000){
+				_teachableMachine.clear();
+			}
 		}
 
 		// private:

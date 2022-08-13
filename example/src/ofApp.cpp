@@ -51,6 +51,18 @@ void ofApp::draw()
             index++;
         }
     }
+
+    auto index = 0;
+    for (auto result : _popeye._teachableMachine._confidences)
+    {
+        auto message = result.first;
+        message += " ";
+        message += ofToString(result.second);
+        auto yOffset = 100;
+        ofDrawBitmapString(
+            message, 100,  yOffset + index * 20);
+        index++;
+    }
     // ofPopMatrix();
 
     // _cam.end();
